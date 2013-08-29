@@ -2,14 +2,17 @@
 /*																*/
 /*				Project:	Simple Midi Parser					*/
 /*																*/
-/*				File: MidiParser.c								*/
+/*				File: MidiParser.h								*/
 /*																*/
 /*				Author: Eugen Füchsle							*/
 /*																*/
 /*																*/
-/*				Task: Should parse a MIDI File					*/
+/*				Task: Defines Constants used in Project			*/
 /*																*/
 /*																*/
 /****************************************************************/
 
-#include "MidiParser.h"
+#define MIDI_TYPE0 0
+#define MIDI_TYPE1 1
+
+
