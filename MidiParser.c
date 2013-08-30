@@ -20,6 +20,7 @@
 MIDIError initParser(char * pcMidiPath, ParsingInformation **pParserStruct)
 {
 	MIDIError error = MID_ERR_OK;
+	int iPathlen = 0;
 
 	ParsingInformation* pMidiParser = NULL; 
 	pMidiParser = (ParsingInformation*) malloc(sizeof(ParsingInformation));
@@ -30,7 +31,7 @@ MIDIError initParser(char * pcMidiPath, ParsingInformation **pParserStruct)
 	}
 
 	memset ( pMidiParser, 0, sizeof(ParsingInformation) );
-	int iPathlen = strlen(pcMidiPath);
+	iPathlen = strlen(pcMidiPath);
 	pMidiParser->pcFilePath = (char *)malloc(iPathlen);
 	if(!pMidiParser->pcFilePath)
 	{
