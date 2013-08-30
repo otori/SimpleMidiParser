@@ -17,20 +17,20 @@
 #include <stdlib.h>
 #include <string.h>
 
-MIDIError initParser(char * pcMidiPath, ParsingInformation **pParserStruct)
+MIDIError MDI_initParser(char * pcMidiPath, MDI_ParsingInformation **pParserStruct)
 {
 	MIDIError error = MID_ERR_OK;
 	int iPathlen = 0;
 
-	ParsingInformation* pMidiParser = NULL; 
-	pMidiParser = (ParsingInformation*) malloc(sizeof(ParsingInformation));
+	MDI_ParsingInformation* pMidiParser = NULL; 
+	pMidiParser = (MDI_ParsingInformation*) malloc(sizeof(MDI_ParsingInformation));
 	if(pMidiParser == NULL)
 	{
 		error = MID_ERR_MALLOC;
 		goto cleanup_err;
 	}
 
-	memset ( pMidiParser, 0, sizeof(ParsingInformation) );
+	memset ( pMidiParser, 0, sizeof(MDI_ParsingInformation) );
 	iPathlen = strlen(pcMidiPath);
 	pMidiParser->pcFilePath = (char *)malloc(iPathlen);
 	if(!pMidiParser->pcFilePath)

@@ -12,6 +12,9 @@
 /*																*/
 /****************************************************************/
 
+#ifndef _MDI_MIDICONSTANTS_H
+#define _MDI_MIDICONSTANTS_H
+
 typedef char MIDIError;
 
 #ifndef NULL 
@@ -34,3 +37,4 @@ typedef char MIDIError;
 #define MID_ERR_FILEOPEN		-2
 #define MID_ERR_INVALIDPARAM	-3
 
+#endif

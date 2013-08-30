@@ -12,6 +12,9 @@
 /*																*/
 /****************************************************************/
 
+#ifndef _MDI_MIDIPARSER_H
+#define _MDI_MIDIPARSER_H
+
 #include "MidiConstants.h"
 #include <stdio.h>
 
@@ -31,21 +34,21 @@ typedef struct
 	char cChannel;		// Between 0 and 15
 	char cParam1;
 	char cParam2;
-} Event;
+} MDI_Event;
 
-typedef struct EventList
+typedef struct MDI_EventList
 {
-	Event *pEvent;
-	struct EventList *pNext;
-} EventList;
+	MDI_Event *pEvent;
+	struct MDI_EventList *pNext;
+} MDI_EventList;
 
-typedef struct MidiTrack
+typedef struct MDI_MidiTrack
 {
 	/* some Metadata in the future... */
 
-	EventList *pEvents;
-	struct MidiTrack *pmtNextTrack; //Pointer to Next track...
-} MidiTrack;
+	MDI_EventList *pEvents;
+	struct MDI_MidiTrack *pmtNextTrack; //Pointer to Next track...
+} MDI_MidiTrack;
 
 typedef struct 
 {
@@ -53,20 +56,22 @@ typedef struct
 	int nTracks;	// Number of tracks
 	int nTicks; 	// Number of ticks (msecs) per quarter note
 
-	MidiTrack *pmtTrackList;
-} MidiHeader;
+	MDI_MidiTrack *pmtTrackList;
+} MDI_MidiHeader;
 
 typedef struct 
 {
 	char* pcFilePath; 	// Path of MIDI File
 	FILE* pfFile; 		// File Handle of MIDI File
 
-	MidiHeader *pMidiHeader; 
-} ParsingInformation;
+	MDI_MidiHeader *pMidiHeader; 
+} MDI_ParsingInformation;
 
 
 /**
 	Initiates the parser and sets the file to pcMidiPath;
 	A Pointer to the parser Struct is createt at pMidiParser
 **/
-MIDIError initParser(char *pcMidiPath, ParsingInformation **pMidiParser);
+MIDIError MDI_initParser(char *pcMidiPath, MDI_ParsingInformation **pMidiParser);
+
+#endif
