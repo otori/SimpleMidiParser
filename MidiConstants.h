@@ -12,7 +12,11 @@
 /*																*/
 /****************************************************************/
 
-typedef MIDIError char;
+typedef char MIDIError;
+
+#ifndef NULL 
+#define NULL 0
+#endif
 
 #define MID_TYPE0 0
 #define MID_TYPE1 1
@@ -27,5 +31,6 @@ typedef MIDIError char;
 
 #define MID_ERR_OK				 0
 #define MID_ERR_MALLOC			-1
-#define MID_ERR_INVALIDPARAM	-2
+#define MID_ERR_FILEOPEN		-2
+#define MID_ERR_INVALIDPARAM	-3
 

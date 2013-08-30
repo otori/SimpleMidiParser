@@ -15,30 +15,51 @@
 #include "MidiParser.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-MIDIError initParser(char * pcMidiPath, ParsingInformation **pMidiParser)
+MIDIError initParser(char * pcMidiPath, ParsingInformation **pParserStruct)
 {
-	MIDIError error = MIDI_ERR_OK;
+	MIDIError error = MID_ERR_OK;
 
 	ParsingInformation* pMidiParser = NULL; 
 	pMidiParser = (ParsingInformation*) malloc(sizeof(ParsingInformation));
 	if(pMidiParser == NULL)
 	{
 		error = MID_ERR_MALLOC;
-		goto cleanup;
+		goto cleanup_err;
 	}
 
 	memset ( pMidiParser, 0, sizeof(ParsingInformation) );
 	int iPathlen = strlen(pcMidiPath);
 	pMidiParser->pcFilePath = (char *)malloc(iPathlen);
 	if(!pMidiParser->pcFilePath)
-		return MID_ERR_MALLOC;
+	{
+		error = MID_ERR_MALLOC;
+		goto cleanup_err;
+	}
 
-	pMidiO fopen();
+	pMidiParser->pfFile = fopen(pMidiParser->pcFilePath , "rb");
 
-cleanup:
+	if(!pMidiParser->pfFile)
+	{
+		error = MID_ERR_FILEOPEN;
+		goto cleanup_err;
+	}
+
+	*pParserStruct = pMidiParser;
+	return MID_ERR_OK;
+
+cleanup_err:
 	/*Free the already allocated stuff*/
-	
+	if(pMidiParser)
+	{
+		if(pMidiParser->pcFilePath)
+			free(pMidiParser->pcFilePath);
+		if(pMidiParser->pfFile)
+			fclose(pMidiParser->pfFile);
+		free(pMidiParser);
+	}
+
 	return error;
 }
 
