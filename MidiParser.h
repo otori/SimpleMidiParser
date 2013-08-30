@@ -63,6 +63,9 @@ typedef struct
 {
 	char* pcFilePath; 	// Path of MIDI File
 	FILE* pfFile; 		// File Handle of MIDI File
+	unsigned char *pucMidiBuffer;	// I will write the whole file into this buffer.
+	unsigned int iBufLen;			// Length of buffer.
+	unsigned int curPos;			// Current position in buffer.
 
 	MDI_MidiHeader *pMidiHeader; 
 } MDI_ParsingInformation;
@@ -73,5 +76,11 @@ typedef struct
 	A Pointer to the parser Struct is createt at pMidiParser
 **/
 MIDIError MDI_initParser(char *pcMidiPath, MDI_ParsingInformation **pMidiParser);
+
+/**
+	Parses the Header of the file;
+	Pass the ParsingInformation struct as argument.
+**/
+MIDIError MDI_parseHeader(MDI_ParsingInformation *pMidiParser);
 
 #endif

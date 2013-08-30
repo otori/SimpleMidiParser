@@ -21,6 +21,11 @@ typedef char MIDIError;
 #define NULL 0
 #endif
 
+#define MID_HEADER_START "MThd"
+#define MID_TRACK_START  "MTrk"
+
+#define MID_FILE_HEADERSIZE_BYTES 4
+
 #define MID_TYPE0 0
 #define MID_TYPE1 1
 
@@ -36,5 +41,9 @@ typedef char MIDIError;
 #define MID_ERR_MALLOC			-1
 #define MID_ERR_FILEOPEN		-2
 #define MID_ERR_INVALIDPARAM	-3
+#define MID_ERR_FILEERR			-4
+#define MID_ERR_NOMIDIHEADER	-5
+#define MID_ERR_INVHEADER		-6
+#define MID_ERR_INVMIDTYPE		-7
 
 #endif
