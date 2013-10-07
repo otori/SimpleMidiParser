@@ -46,4 +46,6 @@ typedef char MIDIError;
 #define MID_ERR_INVHEADER		-6
 #define MID_ERR_INVMIDTYPE		-7
 
+#define MID_ERR_INVTRACKHEADER	-8
+
 #endif

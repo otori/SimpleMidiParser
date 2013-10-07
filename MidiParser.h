@@ -83,4 +83,10 @@ MIDIError MDI_initParser(char *pcMidiPath, MDI_ParsingInformation **pMidiParser)
 **/
 MIDIError MDI_parseHeader(MDI_ParsingInformation *pMidiParser);
 
+/**
+	Finds and parses the next Track from curPos of the file;
+	Pass the ParsingInformation struct as argument.
+**/
+MIDIError MDI_parseNextTrack(MDI_ParsingInformation *pMidiParser);
+
 #endif

@@ -17,6 +17,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef _NO_BOOL //Fuck some c-compiler
+#define bool	char
+#define true	1
+#define false	0
+#endif
+
 MIDIError MDI_initParser(char * pcMidiPath, MDI_ParsingInformation **pParserStruct)
 {
 	MIDIError error = MID_ERR_OK;
@@ -81,7 +87,7 @@ MIDIError MDI_parseHeader(MDI_ParsingInformation *pMidiParser)
 	MDI_ParsingInformation *mp = pMidiParser;
 	MIDIError error = MID_ERR_OK;
 	char strMidiHeader[] = MID_HEADER_START;
-	int i;
+	unsigned int i;
 	size_t headerSize;
 	bool bType = true; 
 
@@ -198,3 +204,101 @@ cleanup_err:
 	return error;
 }
 
+MIDIError MDI_parseNextTrack(MDI_ParsingInformation *pMidiParser)
+{
+	MIDIError error = MID_ERR_OK;
+	char strMidiTrack[] = MID_TRACK_START;
+	char strMidiTrackEnd[] = {0x00, 0xFF, 0x2F, 0x00};
+	MDI_ParsingInformation *mp = pMidiParser;
+	MDI_MidiHeader *mh;
+	MDI_MidiTrack * mTrack = NULL;
+	int i,k;
+	int iTimeStamp, iEvtCode, iChannel;
+	unsigned char ucTmp;
+
+	if(!mp)
+	{
+		error = MID_ERR_INVALIDPARAM;
+		goto cleanup_err;
+	}
+	mh = mp->pMidiHeader;
+	if(!mh)
+	{
+		error = MID_ERR_INVALIDPARAM;
+		goto cleanup_err;
+	}
+
+
+	mTrack = (MDI_MidiTrack*) malloc(sizeof(MDI_MidiTrack));
+	
+	if(mp->curPos + 4 > mp->iBufLen)
+	{
+		error = MID_ERR_FILEERR;
+		goto cleanup_err;
+	}
+
+	for(i = 0; i < sizeof(strMidiTrack); ++i)
+	{
+		if(mp->pucMidiBuffer[mp->curPos + 1] != strMidiTrack[i])
+		{
+			error = MID_ERR_INVTRACKHEADER;
+			goto cleanup_err;
+		}
+	}
+	mp->curPos += 4;
+
+	if(mp->curPos + 4 > mp->iBufLen)
+	{
+		error = MID_ERR_FILEERR;
+		goto cleanup_err;
+	}
+	mp->curPos += 4; //Ignore size of Track data. Is incorrect in most cases, claims <http://www.ccarh.org/courses/253/assignment/midifile/>
+
+	while(1)
+	{
+
+		//Loop Start
+
+		if(mp->curPos + 4 > mp->iBufLen)
+		{
+			error = MID_ERR_FILEERR;
+			goto cleanup_err;
+		}
+
+		if(mp->pucMidiBuffer[mp->curPos] == strMidiTrackEnd[0] &&
+			mp->pucMidiBuffer[mp->curPos + 1] == strMidiTrackEnd[1] &&	
+			mp->pucMidiBuffer[mp->curPos + 1] == strMidiTrackEnd[2] &&
+			mp->pucMidiBuffer[mp->curPos + 2] == strMidiTrackEnd[3]
+		)
+		{
+			// End of MIDI Track;
+			mp->curPos += 4; 
+			return MID_ERR_OK;
+		}
+
+		//Parse Event :
+		iTimeStamp = 0; i = 0;	
+		while(mp->pucMidiBuffer[mp->curPos] > 0x80)i++; // amount of bytes of timestamp
+		for(k = 0; k < i; ++k)
+		{
+			iTimeStamp += mp->pucMidiBuffer[mp->curPos] & 0x7F;
+			iTimeStamp = iTimeStamp << 7;
+			mp->curPos++;
+		}		
+		iTimeStamp += mp->pucMidiBuffer[mp->curPos];
+		mp->curPos++;
+
+		ucTmp = mp->pucMidiBuffer[mp->curPos];
+		iEvtCode = ucTmp >>  4;
+		iChannel = ucTmp & 0xF;
+		mp->curPos++;
+
+		
+	}
+
+cleanup_err:
+
+	if(mTrack) free(mTrack);
+
+	return error;
+}
