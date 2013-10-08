@@ -36,7 +36,6 @@ MIDIError MDI_initParser(char * pcMidiPath, MDI_ParsingInformation **pParserStru
 		error = MID_ERR_MALLOC;
 		goto cleanup_err;
 	}
-
 	memset ( pMidiParser, 0, sizeof(MDI_ParsingInformation) );
 	
 	pMidiParser->pfFile = fopen(pcMidiPath , "rb");
@@ -96,13 +95,13 @@ MIDIError MDI_parseHeader(MDI_ParsingInformation *pMidiParser)
 		goto cleanup_err;
 	}
 
-	mp->pMidiHeader = (MDI_MidiHeader*) malloc(sizeof(MDI_MidiHeader));
-	memset(mp->pMidiHeader, 0, sizeof(MDI_MidiHeader));
+	mp->pMidiHeader = (MDI_MidiHeader*) malloc(sizeof(MDI_MidiHeader));	
 	if(!mp->pMidiHeader)
 	{
 		error = MID_ERR_MALLOC;
 		goto cleanup_err;
 	}
+	memset(mp->pMidiHeader, 0, sizeof(MDI_MidiHeader));
 
 	//Checking for Header Marker
 	for(i = 0; i < sizeof(strMidiHeader) - 1; i++)
@@ -230,13 +229,14 @@ MIDIError MDI_parseNextTrack(MDI_ParsingInformation *pMidiParser)
 		goto cleanup_err;
 	}
 	
-	mTrack = (MDI_MidiTrack*) malloc(sizeof(MDI_MidiTrack));	
-	memset(mTrack, 0, sizeof(MDI_MidiTrack));
+	mTrack = (MDI_MidiTrack*) malloc(sizeof(MDI_MidiTrack));		
 	if(!mTrack)
 	{
 		error = MID_ERR_MALLOC;
 		goto cleanup_err;
 	}
+	memset(mTrack, 0, sizeof(MDI_MidiTrack));
+
 	if(!mh->pmtTrackList)
 		mh->pmtTrackList = mTrack;
 	else
