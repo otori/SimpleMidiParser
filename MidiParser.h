@@ -30,16 +30,17 @@ typedef struct MidiParserCallbacks
 typedef struct 
 {
 	int	iTimeStamp;		// Ticks left since last event.
-	char cEventCode;	// See Constants
-	char cChannel;		// Between 0 and 15
-	char cParam1;
-	char cParam2;
+	unsigned char cEventCode;	// See Constants
+	unsigned char cChannel;		// Between 0 and 15
+	unsigned char cParam1;
+	unsigned char cParam2;
 } MDI_Event;
 
 typedef struct MDI_EventList
 {
 	MDI_Event *pEvent;
 	struct MDI_EventList *pNext;
+
 } MDI_EventList;
 
 typedef struct MDI_MidiTrack
@@ -60,8 +61,7 @@ typedef struct
 } MDI_MidiHeader;
 
 typedef struct 
-{
-	char* pcFilePath; 	// Path of MIDI File
+{	
 	FILE* pfFile; 		// File Handle of MIDI File
 	unsigned char *pucMidiBuffer;	// I will write the whole file into this buffer.
 	unsigned int iBufLen;			// Length of buffer.
